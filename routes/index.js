@@ -1,5 +1,6 @@
 const draw = require('../controllers/draw');
 const getDrawNumberDetail = require('../controllers/getDrawNumberDetail');
+const getDrawNumberHistory = require('../controllers/getDrawNumberHistory');
 const router = require('express').Router();
 
 // inbound
@@ -16,6 +17,7 @@ router.use((req, res, next) => {
 // route
 router.post('/draw', draw);
 router.get('/drawNumber', getDrawNumberDetail);
+router.get('/drawNumber/history', getDrawNumberHistory);
 
 // error handler
 router.use((error, req, res, next) => {
