@@ -30,34 +30,33 @@ const { setOffset } = require("../services");
  *             schema:
  *               type: object
  *               properties:
- *                 drawNumber:
- *                   type: string
- *                   description: The draw number.
- *                 nextDrawNumber:
- *                   type: string
- *                   description: The next draw number.
+ *                 page:
+ *                   type: number
+ *                   description: The page number.
+ *                 total:
+ *                   type: number
+ *                   description: The total number of drawNumber.
  *                 tickets:
  *                   type: array
  *                   items:
  *                     type: object
  *                     properties:
- *                       _id:
- *                         type: string
- *                         description: The ticket ID.
  *                       drawNumber:
  *                         type: string
- *                         description: The draw number for the ticket.
- *                       isWinner:
+ *                         description: The draw number.
+ *                       nextDrawNumber:
  *                         type: string
- *                         description: Indicates if the ticket is a winner.
- *                       createdAt:
+ *                         description: The next draw number.
+ *                       winner:
+ *                         type: array
+ *                         description: List of the winners (in case any bugs found).
+ *                       drawNumberCreatedAt:
  *                         type: string
  *                         format: date-time
  *                         description: The ticket creation date and time.
- *                       updatedAt:
- *                         type: string
- *                         format: date-time
- *                         description: The ticket last update date and time.
+ *                       totalTicket:
+ *                         type: number
+ *                         description: The number of total draw.
  *       500:
  *         description: Server error
  */
