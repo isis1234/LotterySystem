@@ -5,7 +5,7 @@ const { setOffset } = require("../services");
 
 /**
  * @swagger
- * /drawNumber/hisotry:
+ * /drawNumber/history:
  *   get:
  *     tags:
  *       - DrawNumber
