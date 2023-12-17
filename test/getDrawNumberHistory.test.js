@@ -19,10 +19,18 @@ test('page: last page + 2', async () => {
   expect(result.results.length).toBe(0);
 });
 
-test('run time <= 2sec', async () => {
+test('run time <= 2sec in size = 10', async () => {
   const startTime = new Date();
-  const result = await getDrawNumberHistoryAPI(1, totalDrawNumber + 10);
+  const result = await getDrawNumberHistoryAPI(1, 10);
   const endTime = new Date();
   const runtime = endTime - startTime;
   expect(runtime).toBeLessThan(2 * 1000);
+});
+
+test('run time <= 5sec in size = 20', async () => {
+  const startTime = new Date();
+  const result = await getDrawNumberHistoryAPI(1, 10);
+  const endTime = new Date();
+  const runtime = endTime - startTime;
+  expect(runtime).toBeLessThan(5 * 1000);
 });

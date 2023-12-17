@@ -69,6 +69,7 @@ const getDrawNumberHistory = async (req, res, next) => {
     // 1. Pre-check
     if(page && !Number(page)) { throw Error("Excepted:page is not a number."); }
     if(size && !Number(size)) { throw Error("Excepted:size is not a number."); }
+    if(size > 50) { throw Error("Excepted:size cannot more than 50."); }
 
     // 2. get all frawNumber
     const queryPage = Number(page) || 1;
