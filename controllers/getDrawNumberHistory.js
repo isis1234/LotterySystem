@@ -67,8 +67,8 @@ const getDrawNumberHistory = async (req, res, next) => {
     const { page, size } = query;
 
     // 1. Pre-check
-    if(!Number(page)) { throw Error("Excepted:page is not a number."); }
-    if(!Number(size)) { throw Error("Excepted:size is not a number."); }
+    if(page && !Number(page)) { throw Error("Excepted:page is not a number."); }
+    if(size && !Number(size)) { throw Error("Excepted:size is not a number."); }
 
     // 2. get all frawNumber
     const queryPage = Number(page) || 1;
@@ -86,7 +86,7 @@ const getDrawNumberHistory = async (req, res, next) => {
         } }
       ]);
     const totalDrawNumber = relatedDrawNumbers[0].totals[0].count;
-    const totalPage = Math.ceil(totalDrawNumber/size);
+    const totalPage = Math.ceil(totalDrawNumber / querySize);
 
     // // 3. get total ticket
     // const drawNumberCount = await drawNumbersModel.find({}).count();

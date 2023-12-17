@@ -9,6 +9,20 @@ module.exports.drawAPI = async () => {
   }
 };
 
+module.exports.getDrawNumberHistoryAPI = (page, size) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`http://localhost:${port}/drawNumber/history`, {
+        params: {
+          ...(page && { page }),
+          ...(size && { size }),
+        },
+      })
+      .then((response) => { resolve(response.data); })
+      .catch((error) => { reject(error); });
+  });
+};
+
 module.exports.setOffset = (page, size) => {
   const pageSize = size ? Number(size) : defaultPageSize;
   const _page = page && Number(page) > 0 ? Number(page) - 1 : 0;

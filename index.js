@@ -1,5 +1,6 @@
 const cron = require('cron');
 const express = require('express');
+const jest = require('jest');
 const mongoose = require('mongoose');
 
 const { port, mongoUrl, drawSchedule, winnerSchedule } = require('./configs');
@@ -22,12 +23,18 @@ app.use('/', routes);
 const drawJob = new cron.CronJob(drawSchedule, async () => { await drawAPI(); });
 const setWinnerJob = new cron.CronJob(winnerSchedule, async () => { await setWinner(); });
 
-app.listen(port, () => {
+app.listen(port, async () => {
   console.log(`Server(${port}) listening`);
-  
-  // Init the drawNumber and get the new winner
-  setWinnerJob.start();
+  try {
+    // Run testcases before all jobs started
+    await jest.run(['--no-cache', '--silent']);
 
-  // Todo: remove it when draw system ready
-  drawJob.start();
+    // Init the drawNumber and get the new winner
+    setWinnerJob.start();
+
+    // Todo: remove it when draw system ready
+    drawJob.start();
+  } catch (error) {
+    console.error(error);
+  }
 });
