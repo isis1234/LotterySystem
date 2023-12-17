@@ -9,18 +9,13 @@ module.exports.drawAPI = async () => {
   }
 };
 
-module.exports.getDrawNumberHistoryAPI = (page, size) => {
-  return new Promise((resolve, reject) => {
-    axios
-      .get(`http://localhost:${port}/drawNumber/history`, {
-        params: {
-          ...(page && { page }),
-          ...(size && { size }),
-        },
-      })
-      .then((response) => { resolve(response.data); })
-      .catch((error) => { reject(error); });
-  });
+module.exports.getDrawNumberHistoryAPI = async (page, size) => {
+  return (await axios.get(`http://localhost:${port}/drawNumber/history`, {
+    params: { 
+      ...page && { page },
+      ...size && { size }, 
+    }
+  })).data;
 };
 
 module.exports.setOffset = (page, size) => {
