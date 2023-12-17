@@ -66,11 +66,15 @@ const getDrawNumberHistory = async (req, res, next) => {
     const { query } = req;
     const { page, size } = query;
 
-    // 1. get all frawNumber
-    const queryPage = page || 1;
-    const querySize = size || defaultPageSize;
+    // 1. Pre-check
+    if(!Number(page)) { throw Error("Excepted:page is not a number."); }
+    if(!Number(size)) { throw Error("Excepted:size is not a number."); }
+
+    // 2. get all frawNumber
+    const queryPage = Number(page) || 1;
+    const querySize = Number(size) || defaultPageSize;
     const { offset } = setOffset(queryPage, querySize);
-    const drawNumbers = await drawNumbersModel
+    const relatedDrawNumbers = await drawNumbersModel
       .aggregate([
         { $sort: { createdAt: -1} },
         { $facet: {
@@ -81,16 +85,21 @@ const getDrawNumberHistory = async (req, res, next) => {
           totals: [{ $count: 'count' }],
         } }
       ]);
+    const totalDrawNumber = relatedDrawNumbers[0].totals[0].count;
+    const totalPage = Math.ceil(totalDrawNumber/size);
+
+    // // 3. get total ticket
+    // const drawNumberCount = await drawNumbersModel.find({}).count();
     
     // 2. get relaed tickets
     const results = [];
-    for (const drawNumber of drawNumbers[0].results) {
+    for (const drawNumber of relatedDrawNumbers[0].results) {
       const { drawNumber: currentDrawNumber, nextDrawNumber, locking, createdAt: drawNumberCreatedAt } = drawNumber;
       
       const totalTicket = await ticketsModel.find({
         drawNumber: currentDrawNumber
       }).count();
-      const winner = await ticketsModel.find({
+      const winners = await ticketsModel.find({
         drawNumber: currentDrawNumber,
         isWinner: true
       });
@@ -101,14 +110,15 @@ const getDrawNumberHistory = async (req, res, next) => {
         locking,
         drawNumberCreatedAt,
         totalTicket,
-        winner,
+        winners,
       });
     }
 
     res.send({
+      totalDrawNumber,
+      totalPage,
       page: queryPage,
       results,
-      total: drawNumbers[0].totals[0].count,
     })
   } catch (error) {
     if (!/^Excepted:/.test(error.message)) { console.log(error); }
